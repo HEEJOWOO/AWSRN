@@ -11,7 +11,9 @@ Adaptive Weighted Super Resolution
 * Local Fusion Block(LFB)으로 구성되어 있고 LFB는 Adaptive weighted residual units (AWRUs)와 Local Residual Fusion Units(LRFU)로 구성
 * 복원 단계로 특징들을 최대한 활용하기위해 Adaptive weighted multi-scale(AWMS) 제안
 * 딥러닝의 발전 → SR 성능의 많은 개선 → 네트워크의 깊이를 늘리며 성능을 올림 → 계산비용의 문제 발생 → 경량화의 중요성 제안 
+
 ![image](https://user-images.githubusercontent.com/61686244/108205349-4ef2bb00-7168-11eb-9d4c-073876da43ad.png)
+
 * 경량화를하기 위해서는 얕은 네트워크이거나, 파라미터를 공유하는 재귀적인 방법 존재 → Operation 증가
 * Residual Scaling 방법은 제한된 고정 가중치만을 사용하는 방법이라서 성능 향상에 제한
 * 대부분의 SRNet의 복원 방법으로 사용되는 transposed, sub pixel 방법들은 전 단계인 non-linear mapping의 정보들을 불충분하게 사용함
@@ -25,8 +27,10 @@ Efficient Residual Learning
 * Residual Learning의 확장판 Weighted Residual Learning(WDSR)
 * wSE는 복원 단계에서 우수한 성능을 만들긴 하였으나 추가적인 파라미터와 계산량이 증가
 * Adaptive Weighted Residual Unit은 AWRU제안, AWRU는 wSE와 다르게 어떠한 추가적인 모듈 없이 독립적인 가중치를 사용 따라서 추가적인 계산량 증가 없음 
+
 Network
 ![image](https://user-images.githubusercontent.com/61686244/108205741-d0e2e400-7168-11eb-84b6-763da344694c.png)
+
 Upsampling Layer
 * 복원단계에 사용하는 업샘플링은 SR에서 중요한 요소 중 하나 
 * SRCNN, VDSR, DRRN과 같이 네트워크에 입력으로 보간된 LR을 사용하는 경우 계산량이 많이 증가
@@ -49,8 +53,10 @@ Local Fusion Block
 ![image](https://user-images.githubusercontent.com/61686244/108207198-c1fd3100-716a-11eb-975c-5d36c40c4db9.png)
 
 * LFB의 AWRUs들의 특징 정보를 더 잘 살리기 위해 LRFU는 다중 level특징 정보를 융합함
+
 Experiment
 * Train : DIV2K / Test : Set5, Set14, Bsd100, Urban100, Manga109
+
 ![image](https://user-images.githubusercontent.com/61686244/108207285-e48f4a00-716a-11eb-9f80-bb63c94e909b.png)
 
 ![image](https://user-images.githubusercontent.com/61686244/108207293-e8bb6780-716a-11eb-970a-aa87aa8dfda3.png)
