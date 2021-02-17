@@ -40,10 +40,12 @@ Method
 
 Local Fusion Block
 * non linear mapping 단계로 LFB는 AWRU와 LRFU으로 구성
+
 ![image](https://user-images.githubusercontent.com/61686244/108207027-882c2a80-716a-11eb-811f-b6cdfd125d86.png)
 
 * 그림 3의 (a)는 기본적인 residual unit을 의미하고 입력과 출력 차원을 축소하고 내부 차원을 확장, 추가적인 파라미터의 증가는 없음, 많은 low level정보를 사용 
 * AWRU는 두 개의 독립적인 가중치를 가지고 있고 초기값을 받은 후 적응적으로 학습
+
 ![image](https://user-images.githubusercontent.com/61686244/108207198-c1fd3100-716a-11eb-975c-5d36c40c4db9.png)
 
 * LFB의 AWRUs들의 특징 정보를 더 잘 살리기 위해 LRFU는 다중 level특징 정보를 융합함
@@ -61,11 +63,13 @@ Experiment
 
 * 3x3, 5x5 커널이 퀄리티에 영향을 많이 끼침,  3x3은 저주파수를 다른 큰 커널들은 고 주파수에 영향을 많이 끼침
 * scale branch 마다 다른 기여도를 가지고 있고 즉 다양한 기능 정보를 가질 수 있음을 의미
+
 ![image](https://user-images.githubusercontent.com/61686244/108207368-012b8200-716b-11eb-9434-ec95a40549c6.png)
 
 ![image](https://user-images.githubusercontent.com/61686244/108207378-04bf0900-716b-11eb-811c-8e1ea133eca5.png)
 
 ![image](https://user-images.githubusercontent.com/61686244/108207389-07b9f980-716b-11eb-8df8-af5187f75bc6.png)
+
 * LFB를 제안하여 효과적인 잔여학습을 할 수 있도록 만들었으며, LFB의 AWRU와 LRFU는 정보와 gradient를 효과적으로 흐를 수 있게 만들었음
 * AWMS는 복잡한 정보를 최대한 활용하고 서로 다른 scale branch사이의 정보 중복성을 분석하여 파라미터의 수를 줄임 
 
