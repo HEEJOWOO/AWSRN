@@ -13,7 +13,20 @@ Adaptive Weighted Super Resolution
 * 딥러닝의 발전 → SR 성능의 많은 개선 → 네트워크의 깊이를 늘리며 성능을 올림 → 계산비용의 문제 발생 → 경량화의 중요성 제안 
 ![image](https://user-images.githubusercontent.com/61686244/108205349-4ef2bb00-7168-11eb-9d4c-073876da43ad.png)
 * 경량화를하기 위해서는 얕은 네트워크이거나, 파라미터를 공유하는 재귀적인 방법 존재 → Operation 증가
-* 
+* Residual Scaling 방법은 제한된 고정 가중치만을 사용하는 방법이라서 성능 향상에 제한
+* 대부분의 SRNet의 복원 방법으로 사용되는 transposed, sub pixel 방법들은 전 단계인 non-linear mapping의 정보들을 불충분하게 사용함
+* 다중 스케일 복원 방법은 더 많은 정보를 제공할 수 있지만 파라미터의 수가 늘어나게됨 
+* AWSRN은 특징 추출단계와, non-linear mapping단계인 LFB으로 구성되어 있으며 LFB는 AWRUs과 LRFU으로 구성 되어 있음, 복원 단계로 제안하는 Adaptive weight multi scale 인 AWMS로 구성
+Contribution
+  * non-linear mapping인 LFB은 AWRUs와 LRFU으로 구성되어 있고 AWRU는 정보와 gradient의 흐름을 효과적으로 사용하게 만듦, LRFU은 LFB의 다중 레벨 잔여 정보들은 융합하는데 효과적임
+  * AWMS는 nonlinear mapping으로부터 특징들을 최대한 사용하게끔 만들어 복원 성능을 향상 시킴, 중복된 scale branch는 가중치에 따라 제거할 수 있음 
+  * SOTA 네트워크들과 비교시 우수한 성능을 만들어 냈음
+Efficient Residual Learning
+  * Residual Learning의 확장판 Weighted Residual Learning(WDSR)
+  * wSE는 복원 단계에서 우수한 성능을 만들긴 하였으나 추가적인 파라미터와 계산량이 증가
+  * Adaptive Weighted Residual Unit은 AWRU제안, AWRU는 wSE와 다르게 어떠한 추가적인 모듈 없이 독립적인 가중치를 사용 따라서 추가적인 계산량 증가 없음 
+Network
+![image](https://user-images.githubusercontent.com/61686244/108205741-d0e2e400-7168-11eb-84b6-763da344694c.png)
 
 
 
