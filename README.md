@@ -18,91 +18,51 @@ Adaptive Weighted Super Resolution
 * 다중 스케일 복원 방법은 더 많은 정보를 제공할 수 있지만 파라미터의 수가 늘어나게됨 
 * AWSRN은 특징 추출단계와, non-linear mapping단계인 LFB으로 구성되어 있으며 LFB는 AWRUs과 LRFU으로 구성 되어 있음, 복원 단계로 제안하는 Adaptive weight multi scale 인 AWMS로 구성
 Contribution
-  * non-linear mapping인 LFB은 AWRUs와 LRFU으로 구성되어 있고 AWRU는 정보와 gradient의 흐름을 효과적으로 사용하게 만듦, LRFU은 LFB의 다중 레벨 잔여 정보들은 융합하는데 효과적임
-  * AWMS는 nonlinear mapping으로부터 특징들을 최대한 사용하게끔 만들어 복원 성능을 향상 시킴, 중복된 scale branch는 가중치에 따라 제거할 수 있음 
-  * SOTA 네트워크들과 비교시 우수한 성능을 만들어 냈음
+* non-linear mapping인 LFB은 AWRUs와 LRFU으로 구성되어 있고 AWRU는 정보와 gradient의 흐름을 효과적으로 사용하게 만듦, LRFU은 LFB의 다중 레벨 잔여 정보들은 융합하는데 효과적임
+* AWMS는 nonlinear mapping으로부터 특징들을 최대한 사용하게끔 만들어 복원 성능을 향상 시킴, 중복된 scale branch는 가중치에 따라 제거할 수 있음 
+* SOTA 네트워크들과 비교시 우수한 성능을 만들어 냈음
 Efficient Residual Learning
-  * Residual Learning의 확장판 Weighted Residual Learning(WDSR)
-  * wSE는 복원 단계에서 우수한 성능을 만들긴 하였으나 추가적인 파라미터와 계산량이 증가
-  * Adaptive Weighted Residual Unit은 AWRU제안, AWRU는 wSE와 다르게 어떠한 추가적인 모듈 없이 독립적인 가중치를 사용 따라서 추가적인 계산량 증가 없음 
+* Residual Learning의 확장판 Weighted Residual Learning(WDSR)
+* wSE는 복원 단계에서 우수한 성능을 만들긴 하였으나 추가적인 파라미터와 계산량이 증가
+* Adaptive Weighted Residual Unit은 AWRU제안, AWRU는 wSE와 다르게 어떠한 추가적인 모듈 없이 독립적인 가중치를 사용 따라서 추가적인 계산량 증가 없음 
 Network
 ![image](https://user-images.githubusercontent.com/61686244/108205741-d0e2e400-7168-11eb-84b6-763da344694c.png)
+Upsampling Layer
+* 복원단계에 사용하는 업샘플링은 SR에서 중요한 요소 중 하나 
+* SRCNN, VDSR, DRRN과 같이 네트워크에 입력으로 보간된 LR을 사용하는 경우 계산량이 많이 증가
+* FSRCNN, SRDenseNet에서 사용한 transposed 같은 경우 불필요한 계산량을 감소시켰음
+* ESPCN에서 제안한 Sub pixel 같은 경우 transposed에서 발생하는 채커보드 문제를 해결 
+* 하지만 transposed, sub pixel 같은 방법은 복원으로 single-scale module만을 사용하고, non linear mapping에서 특징 정보를 활용하는데 적합하지 못함 
+* 제안하는 AWMS같은 경우 다중 scale conv를 사용하며 성능과 파라미터 사이의 어느 정도 절충을 가지고 있고 학습된 가중치에 따라 기여도가 낮은 일부 scale을 제거하여 성능 저하 없이 매개 변수를 줄일 수 있음 
+Method
+![image](https://user-images.githubusercontent.com/61686244/108206959-7185d380-716a-11eb-8e44-73ce0403afd6.png)
+Local Fusion Block
+* non linear mapping 단계로 LFB는 AWRU와 LRFU으로 구성
+![image](https://user-images.githubusercontent.com/61686244/108207027-882c2a80-716a-11eb-811f-b6cdfd125d86.png)
+* 그림 3의 (a)는 기본적인 residual unit을 의미하고 입력과 출력 차원을 축소하고 내부 차원을 확장, 추가적인 파라미터의 증가는 없음, 많은 low level정보를 사용 
+* AWRU는 두 개의 독립적인 가중치를 가지고 있고 초기값을 받은 후 적응적으로 학습
+![image](https://user-images.githubusercontent.com/61686244/108207198-c1fd3100-716a-11eb-975c-5d36c40c4db9.png)
+* LFB의 AWRUs들의 특징 정보를 더 잘 살리기 위해 LRFU는 다중 level특징 정보를 융합함
+Experiment
+* Train : DIV2K / Test : Set5, Set14, Bsd100, Urban100, Manga109
+![image](https://user-images.githubusercontent.com/61686244/108207285-e48f4a00-716a-11eb-9f80-bb63c94e909b.png)
+![image](https://user-images.githubusercontent.com/61686244/108207293-e8bb6780-716a-11eb-970a-aa87aa8dfda3.png)
+![image](https://user-images.githubusercontent.com/61686244/108207311-ece78500-716a-11eb-924e-71aea5e4402d.png)
+![image](https://user-images.githubusercontent.com/61686244/108207327-f244cf80-716a-11eb-90e4-3d1b9035e7a8.png)
+![image](https://user-images.githubusercontent.com/61686244/108207336-f53fc000-716a-11eb-83b6-30855de5a079.png)
+* 3x3, 5x5 커널이 퀄리티에 영향을 많이 끼침,  3x3은 저주파수를 다른 큰 커널들은 고 주파수에 영향을 많이 끼침
+* scale branch 마다 다른 기여도를 가지고 있고 즉 다양한 기능 정보를 가질 수 있음을 의미
+![image](https://user-images.githubusercontent.com/61686244/108207368-012b8200-716b-11eb-9434-ec95a40549c6.png)
+![image](https://user-images.githubusercontent.com/61686244/108207378-04bf0900-716b-11eb-811c-8e1ea133eca5.png)
+![image](https://user-images.githubusercontent.com/61686244/108207389-07b9f980-716b-11eb-8df8-af5187f75bc6.png)
+* LFB를 제안하여 효과적인 잔여학습을 할 수 있도록 만들었으며, LFB의 AWRU와 LRFU는 정보와 gradient를 효과적으로 흐를 수 있게 만들었음
+* AWMS는 복잡한 정보를 최대한 활용하고 서로 다른 scale branch사이의 정보 중복성을 분석하여 파라미터의 수를 줄임 
 
 
 
 
 
 
-
-
-
-
-* Residual Dense Block(RDB)
-  * Dense Connected Convolutional layers
-  * 많은 local feature 추출
-* Contiguous memory(CM)
-  * 이전 RDB output 현재 RDB Conv layer 연결
-* Local Feature Fusion(LFF) 
-  * 이전의 특징과 현재의 특징을 효과적으로 학습
-  * 넓은 Network을 Training할 때 안정적으로 학습
-* Global Feature Fusion(GFF)
-  * 계층적인 특징들을 학습
-
-* DenseNet과의 차이점
-  * High-level computer vision에 사용 / RDN : Img SR에 사용
-  * Batch normalization 제거 
-  * Pooling layer 제거  
-  * 계층적 특징들을 사용하기 위한 Global feature fusion
-  
-* SR DenseNet 과의 차이점
-  * 이전 RDB의 output을 현재 RDB의 Conv layer에 모두 사용하는 CM 사용
-  * Local Feature Fusion 사용, 높은 Growth rate
-
-* MemNet 과의 차이점
-  * MemNet의 Memory block끼리 접근 할 수 없음
-  * Local feature의 정보를 완벽하게 사용할 수 없음
-  * MemNet : ILR 사용 / RDN : LR 사용
- 
-RDN Architecture
------------------
-![image](https://user-images.githubusercontent.com/61686244/94661523-221d4300-0342-11eb-8fec-570c89dc9a56.png)
-![image](https://user-images.githubusercontent.com/61686244/94662154-f77fba00-0342-11eb-8ab9-70a9f647e37e.png)
- * Shallow Feature Extraction Net
-    * 두개의 Convolution으로 구성 돼 있으면 얕은 특징을 추출하는 단계로 이루어져있음
-    * 첫 번째 Conv를 통과해서 나온 F-1은 두 번째 Conv의 input이기도 하지만 Dense Feature Fusion에 사용된 Global residual learning의 input 값으로도 사용
-    * 두 번째 Conv를 통과해서 나온 F0도 얕은 특징을 추출하는 단계이며 RDB에 input으로 들어가는 기능 수행
-
-* Residual Dense Blocks(RDBs)
-  * Global feature fusion을 보게 되면 각 RDB로부터 나온 특징들을 융합을 하여 FGF를 만드는 단계
-  * 1x1 conv와 3x3 conv를 지나가게 되는데 1x1 conv는 앞에서 봤더 각 RDB마다 적용을 했던 1x1과 동일한 작용을 하며 따라서 채널의 수를 제어하는 역할을 함
-  * 3x3 conv 같은 경우에는 앞의 F-1의 global residual learning을 위해 특징을 추가로 추출하기 위해 사용
-  * RDB로 부터 나온 여러 level의 특징들은 FGF형태를 띄우고 후에 global residual learning 와 dense feature fusio을 통해 Fdf를 만들 수 있음
-
-
-* Dense Feature Fusion(DFF)
-    * DFF단계는 RDB를 통해서 나온 global feature fusion과 앞에서 첫 번째 conv를 통해서 나온 global residual learning, GRL을 포함하고 있는 단계
-
-* Up-Sampling Net(UPNet)
-    * ESPCN논문에서 선보인 sub pixel convolution을 사용하여 채널 별 셔플을 통해 up sampling을 진행
-    
-Different values of D, C, G
----------------------------
-![image](https://user-images.githubusercontent.com/61686244/94675231-5e599f00-0354-11eb-9f3f-066b10444706.png)
-* Train Set : DIV2K / Test Set : Set5, Set14, Urban100, Manga109 
-
-Different combinations of CM, LRL, and GFF
-------------------------------------------
-![image](https://user-images.githubusercontent.com/61686244/94675319-7fba8b00-0354-11eb-9b7a-e1310be2542b.png)
-![image](https://user-images.githubusercontent.com/61686244/94675337-85b06c00-0354-11eb-81ce-4cd0dd75a257.png)
-
-BI degradation model
---------------------
-![image](https://user-images.githubusercontent.com/61686244/94675441-b42e4700-0354-11eb-90aa-e8b86f7bf2ff.png)
-
-BD degradation model & Bicubic downsample model
------------------------------------------------
-![image](https://user-images.githubusercontent.com/61686244/94675517-d1fbac00-0354-11eb-9c7d-62de7c903b45.png)
-![image](https://user-images.githubusercontent.com/61686244/94675684-10916680-0355-11eb-9c6c-6b7bd4664f81.png)
 
 
 
