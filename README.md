@@ -28,7 +28,7 @@ Efficient Residual Learning
 * wSE는 복원 단계에서 우수한 성능을 만들긴 하였으나 추가적인 파라미터와 계산량이 증가
 * Adaptive Weighted Residual Unit은 AWRU제안, AWRU는 wSE와 다르게 어떠한 추가적인 모듈 없이 독립적인 가중치를 사용 따라서 추가적인 계산량 증가 없음 
 
-Network
+
 ![image](https://user-images.githubusercontent.com/61686244/108205741-d0e2e400-7168-11eb-84b6-763da344694c.png)
 
 Upsampling Layer
@@ -39,7 +39,7 @@ Upsampling Layer
 * 하지만 transposed, sub pixel 같은 방법은 복원으로 single-scale module만을 사용하고, non linear mapping에서 특징 정보를 활용하는데 적합하지 못함 
 * 제안하는 AWMS같은 경우 다중 scale conv를 사용하며 성능과 파라미터 사이의 어느 정도 절충을 가지고 있고 학습된 가중치에 따라 기여도가 낮은 일부 scale을 제거하여 성능 저하 없이 매개 변수를 줄일 수 있음 
 
-Method
+
 ![image](https://user-images.githubusercontent.com/61686244/108206959-7185d380-716a-11eb-8e44-73ce0403afd6.png)
 
 Local Fusion Block
